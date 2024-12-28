@@ -1,0 +1,104 @@
+
+Pizza King Application
+-----------------------
+
+
+------------------------------------------------------------------------
+https://www.oauth.com/playground/index.html
+
+Authorization Code:
+
+Client Registration
+Great!
+Great! A new OAuth 2.0 client was created for you along with a user account. You can see the registration info below. This information is stored in a cookie in your browser. Save the user login and password, since you'll need those in order to authenticate as that user during the OAuth flow!
+
+Client Registration
+client_id	u7KbmTDU1vL21DMC5KNWlqCs
+client_secret	xVCcip5y5LTpnXoYJdG4pKtPj0i1rFCgcjHdoGhLWtkvt4oM
+
+User Account
+login	encouraging-kangaroo@example.com
+password	Panicky-Fowl-78
+------------------------------------------------------------------------
+
+
+REACT Application as Client
+Authorization server (Key Cloak or Okta)
+ResourceServer (Spring Boot Application)
+We as a resource owner : we own the resource
+
+
+1. Pulled Keycloak image in Docker
+docker run -d -p 9192:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin -e KEYCLOAK_HTTP_CORS=true -e KEYCLOAK_HTTP_CORS_ALLOWED_ORIGINS=http://localhost:5173 quay.io/keycloak/keycloak:26.0.7 start-dev
+docker run -d \
+  -p 9192:8080 \
+  --name keycloak \
+  -e KEYCLOAK_HTTP_CORS=true \
+  -e KEYCLOAK_HTTP_CORS_ALLOWED_ORIGINS=http://localhost:5173 \
+  -e KEYCLOAK_HTTP_CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE \
+  -e KEYCLOAK_HTTP_CORS_ALLOWED_HEADERS=Authorization,Content-Type \
+  -e KEYCLOAK_HTTP_CORS_SUPPORT_CREDENTIALS=true \
+  -e KEYCLOAK_REALM=pk-dev \
+  -e KEYCLOAK_CLIENT_ID=auth-client \
+  jboss/keycloak:latest
+
+
+2. Created a new user, Client ID groups etc.
+3. From postman we requested for Access token
+localhost:8080/api/v1/products
+
+
+4. now Configure applicxation properties
+server:
+  port: 9090
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/PizzaKing
+    username: postgres
+    password: pizzaking
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/myrealm
+
+
+5. Now we have added authentication to our apis
+  
+  httpSecurity.cors(AbstractHttpConfigurer::disable);
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/api/v1/**").authenticated()
+                .anyRequest().permitAll()
+        );
+        httpSecurity.oauth2ResourceServer(authServer -> authServer.jwt(Customizer.withDefaults()));
+        return httpSecurity.build();
+
+
+
+
+6. Now we need to use authorization before making any request to our backend
+
+7. Get new access token using key cloak auth client and client secret
+
+--------------------------------
+
+In front end
+make a react app using Vite
+
+add keycloak dependency
+axios for api call
+
+now able to login using key cloak.
+
+
+
+

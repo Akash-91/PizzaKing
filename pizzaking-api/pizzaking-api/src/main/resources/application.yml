@@ -1,0 +1,21 @@
+server:
+  port: 9090
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/PizzaKing
+    username: postgres
+    password: pizzaking
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9192/realms/pk-dev
+          jwk-set-uri: http://localhost:9192/realms/pk-dev/protocol/openid-connect/certs

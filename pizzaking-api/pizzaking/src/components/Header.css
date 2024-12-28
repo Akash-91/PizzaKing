@@ -1,0 +1,56 @@
+/* Header container */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa; /* Light gray background */
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo section */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 150px;
+  height: 150px;
+  margin-right: 10px;
+}
+
+.logo span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* User actions section */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between user name and button */
+}
+
+/* User name styling */
+.user-name {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Logout button styling */
+.logout-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  color: white;
+  background-color: #ff4500; /* Orange-red color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #e03e00; /* Darker shade on hover */
+}
